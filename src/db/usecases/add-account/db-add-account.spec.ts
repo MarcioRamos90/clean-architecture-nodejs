@@ -1,18 +1,22 @@
 import { DbAddAccount } from './db-add-account'
 import { Encrypter } from '../../protocols/encryter'
 
+const makeEncrypter = (): Encrypter => {
+  class EncrypterStup implements Encrypter {
+    async encrypt (value: string): Promise<string> {
+      return 'hashad_password'
+    }
+  }
+  return new EncrypterStup()
+}
+
 interface SutTypes {
   encrypterStup: Encrypter
   sut: DbAddAccount
 }
 
 const makeSut = (): SutTypes => {
-  class EncrypterStup implements Encrypter {
-    async encrypt (value: string): Promise<string> {
-      return 'hashad_password'
-    }
-  }
-  const encrypterStup = new EncrypterStup()
+  const encrypterStup = makeEncrypter()
   const sut = new DbAddAccount(encrypterStup)
   return {
     encrypterStup,
