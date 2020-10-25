@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "sucrase-node src/main/server.ts",
     "test": "jest --passWithNoTests --silent --runInBand",
     "posttest": "jest --clearCache",
     "test:verbose": "jest --passWithNoTests --runInBand",
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
     "@types/bcrypt": "^3.0.0",
+    "@types/express": "^4.17.8",
     "@types/jest": "^26.0.15",
     "@types/mongodb": "^3.5.31",
     "@types/node": "^14.14.2",
@@ -41,6 +43,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
     "mongodb": "^3.6.2",
     "validator": "^13.1.17"
   }
