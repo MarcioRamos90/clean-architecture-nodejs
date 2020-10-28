@@ -8,11 +8,11 @@ module.exports = {
     '!**/test/**'
   ],
   coverageDirectory: 'coverage',
-  testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'
   },
   preset: '@shelf/jest-mongodb',
+  watchPathIgnorePatterns: ['globalConfig'],
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1'
   }
