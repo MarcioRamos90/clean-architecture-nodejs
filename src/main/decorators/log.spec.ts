@@ -1,9 +1,21 @@
+import { LogErrorRepository } from '../../data/protocols/log-error-repository'
+import { serverError } from '../../presentation/helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse } from '../../presentation/protocols'
 import { LoggerControllerDecorator } from './log'
 
 interface SutTypes {
   sut: LoggerControllerDecorator
   controllerStub: Controller
+  logErrorRepositoryStub: LogErrorRepository
+}
+
+const makeLogErrorRepository = (): LogErrorRepository => {
+  class LogErrorRepositoryStub implements LogErrorRepository {
+    async log (stack: string): Promise<void> {
+      return null
+    }
+  }
+  return new LogErrorRepositoryStub()
 }
 
 const makeController = (): Controller => {
@@ -26,11 +38,13 @@ const makeController = (): Controller => {
 
 const makeSut = (): SutTypes => {
   const controllerStub = makeController()
+  const logErrorRepositoryStub = makeLogErrorRepository()
 
-  const sut = new LoggerControllerDecorator(controllerStub)
+  const sut = new LoggerControllerDecorator(controllerStub, logErrorRepositoryStub)
   return {
     sut,
-    controllerStub
+    controllerStub,
+    logErrorRepositoryStub
   }
 }
 
@@ -74,5 +88,25 @@ describe('Log Controller Decorator', () => {
         passwordConfirmation: '12344'
       }
     })
+  })
+
+  test('Should call LogErrorRepository with correct error if controller returns a server error', async () => {
+    const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
+    const fakeError = new Error()
+    fakeError.stack = 'any_stack'
+    const error = serverError(fakeError)
+    const logSpy = jest.spyOn(logErrorRepositoryStub, 'log')
+    jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(new Promise((resolve) => resolve(error)))
+    const httpRequest: HttpRequest = {
+      body: {
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password',
+        passwordConfirmation: 'any_passwordConfirmation'
+
+      }
+    }
+    await sut.handle(httpRequest)
+    expect(logSpy).toHaveBeenCalledWith('any_stack')
   })
 })
