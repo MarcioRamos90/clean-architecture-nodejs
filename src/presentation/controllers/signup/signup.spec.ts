@@ -22,12 +22,6 @@ const makeAddAccount = (): AddAccount => {
   return new AddAccountStup()
 }
 
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid_name',
-  email: 'valid_email@mail.com',
-  password: 'valid_password'
-})
 interface SutTypes {
   sut: SignUpController
   emailValidatorStub: EmailValidator
@@ -44,6 +38,13 @@ const makeSignUpSut = (): SutTypes => {
     addAccountStub
   }
 }
+
+const makeFakeAccount = (): AccountModel => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid_email@mail.com',
+  password: 'valid_password'
+})
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   body: {
