@@ -70,21 +70,6 @@ const makeFakeHttpRequest = (): HttpRequest => ({
 })
 
 describe('Signup Controller', () => {
-  test('Should return 400 if password fails', async () => {
-    // sut - system under test
-    const httpRequest = {
-      body: {
-        name: 'any_name',
-        email: 'any_email@mail.com',
-        password: 'any_password',
-        passwordConfirmation: 'invalid_password'
-      }
-    }
-    const { sut } = makeSignUpSut()
-    const httResponse = await sut.handle(httpRequest)
-    expect(httResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation')))
-  })
-
   test('Should return 400 if an invalid email is provided', async () => {
     // sut - system under test
     const httpRequest = {
