@@ -24,7 +24,7 @@ const makeFakeAuthentication = (): AuthenticationModel => {
 const makeTokenGenerator = (): TokenGenerator => {
   class TokenGeneratorStub implements TokenGenerator {
     async generate (id: string): Promise<string> {
-      return 'hashed_id'
+      return 'token_id'
     }
   }
   return new TokenGeneratorStub()
@@ -121,5 +121,11 @@ describe('DbAuthentication UseCase', () => {
     jest.spyOn(tokenGeneratorStub, 'generate').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.auth(makeFakeAuthentication())
     await expect(promise).rejects.toThrow()
+  })
+
+  it('Should return a token if TokeGenerator succeeds', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.auth(makeFakeAuthentication())
+    expect(accessToken).toBe('token_id')
   })
 })
