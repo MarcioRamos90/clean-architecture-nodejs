@@ -26,7 +26,7 @@ export const MongoHelper = {
   },
 
   map (collection: any): AccountModel {
-    const { _id, ...collectionWithotId } = collection
-    return Object.assign({}, collectionWithotId, { id: _id })
+    const { _id, ...collectionWithoutId } = collection
+    return Object.assign({}, collectionWithoutId, { id: _id })
   }
 }
